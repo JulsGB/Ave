@@ -186,7 +186,7 @@ class BDUsuario {
          
          //$TarjetaDescuento=new Ta;
         while ($row = mysqli_fetch_array($result)) {
-            $tarjetas[3] = new TarjetaDescuento():
+            //                               .0$tarjetas[3] = new TarjetaDescuento()
             echo $row[0] . " - " . + $row[1];
         }
         echo $query;
