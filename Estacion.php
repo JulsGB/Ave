@@ -10,7 +10,7 @@
  *
  * @author Samsung
  */
-require_once ("../BDclases/BDEstacion.php");
+require_once ("./BDEstacion.php");
 
 class Estacion {
    //-------------------------------ATTRIBUTOS--------------------------------//
@@ -78,6 +78,11 @@ class Estacion {
      public function CuentaTodos($condiciones) {
         $objbd = new BDestacion();
         $res=$objbd->CuentaTodos($condiciones);
+        return $res;
+    }
+    public function DameNombreCiudades(){
+         $objbd = new BDestacion();
+        $res=$objbd-> DameNombreCiudades();
         return $res;
     }
     

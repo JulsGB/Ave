@@ -10,8 +10,15 @@
  *
  * @author Samsung
  */
-require_once ("../BDatosConexion.php");
+require_once ("./BDatosConexion.php");
 class BDEstacion {
+       private $BD = null;
+
+    //creamos una un objeto de base de datos
+    public function __construct() {
+        $this->BD = new BDatosConexion();
+    }
+
        //funcion que devuelve un Usuario de la base de datos segun su ID encriptado null de lo contrario
     public function DamePorIDMD5($id) {
         $result = null;
@@ -99,6 +106,24 @@ class BDEstacion {
         }
         return $aUsers;
     }
+    
+    //funcion que devuelve las ciudades
+     public function DameNombreCiudades(){
+         $result = null;
+        $sql = 'SELECT nombre FROM Ciudad ;';
+        $datos = $this->BD->Query($sql);
+        //creamos un nuevo usuario y le insertamos los valores de la BD 
+        $aUsers = array();
+        while (!$datos->EOF) {
+                $result = new Estacion();
+                $result->setCiudad($datos->fields["nombre"]);
+                $aUsers[] = $result;
+            $datos->MoveNext();
+        }
+        return $aUsers;
+
+         
+     }
 
     //funcion que devuelve count de Usuario de la base de datos segun condiciones
     public function CuentaTodos($condiciones) {

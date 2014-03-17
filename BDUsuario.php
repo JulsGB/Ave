@@ -9,6 +9,7 @@
   /**
  * includes 
  */
+
 require_once ("./BDatosConexion.php");
 
 /**
@@ -59,7 +60,7 @@ class BDUsuario {
     public function Autenticar($login, $pass) {
         $valido = false;
         //comprobamos que el usuario este activo + login + passw
-        $sql = "SELECT * FROM usuario  WHERE login='" . $login . "' AND pass='" . md5($pass);
+        $sql = "SELECT * FROM Usuario  WHERE login='" . $login . "' AND pass='" .$pass."';";
         $datos = $this->BD->Query($sql);
         if (!$datos->EOF) {
             $valido = true;
@@ -166,7 +167,7 @@ class BDUsuario {
     }
 
     Public function Consulta($eorigen, $edestino, $corigen, $cdestino, $hsalida) {
-
+        /*
         $tipoBD = "mysql";
         $hostBD = "bbdd.dlsi.ua.es:3306";
         $userBD = "gi_ave";
@@ -200,7 +201,7 @@ class BDUsuario {
 
         //$sql = "call  Consulta_Viaje('" . $eorigen . "','" . $edestino . "','" . $corigen . "','" . $cdestino . "','" . $hsalida . "');";
         //$datos = $this->BD->Query($sql);
-        // echo $datos->fields["Trayecto_id"];
+        // echo $datos->fields["Trayecto_id"];*/
     }
 
 }

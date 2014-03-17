@@ -9,7 +9,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once ("./BDatosConexion.php");
+require_once("./BDatosConexion.php");
 ?>
         <table>
             <tr><td>  <form method="POST" action="Admin.php">

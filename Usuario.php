@@ -1,5 +1,4 @@
 <?php
-
 error_reporting(E_ALL);
 
 /**
@@ -13,15 +12,8 @@ if (0 > version_compare(PHP_VERSION, '5')) {
     die('This file was generated for PHP 5');
 }
 
-/**
- * includes 
- */
-/*$usuarios_sesion = "USUARIOS_SESION";
-session_name($usuarios_sesion);
-session_start();
-require_once ($_SESSION['DirRaiz'] . "/Modelos/BDClases/BDclass.BDUsuario.php");
-*/
-require_once ("./BDUsuario.php");
+require_once('./BDUsuario.php');
+
 /**
  * clase Usuario
  * representa todos los usuarios de la aplicacion de ella heredan desarrollador
