@@ -30,7 +30,7 @@ require_once ("./BDEstaciones.php");
 <p>
 <label for="origen">
 Ida
-<input name="radio" type="radio" id="tipo" value="tipo" checked="checked" />Ida y vuelta<input type="radio" name="radio" id="tipo" value="tipo" />
+<input name="idavuelta" type="radio" id="tipo" value="1" checked="checked" />Ida y vuelta<input type="radio" name="idavuelta" id="tipo" value="2" />
 <br />
 Origen</label>
 <select name="origen" id="origen">
