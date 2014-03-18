@@ -35,6 +35,8 @@ class BDBusqueda {
     private $descJoven;
     private $descViejo;
     private $idaVuelta;
+    private $codeOrg;
+    private $codeDes;
     private $option;
     
 
@@ -108,6 +110,15 @@ class BDBusqueda {
         echo '<td align=center colspan=4><img src="data:image/jpg;base64,'.$img_str.'" height="91" width="137"/></td>';
         
     }
+    
+    Public function CodesCiudades() {    
+        $query = "SELECT code FROM gi_ave.EstacionCiudad where idciudad = " . $this->corigen .
+                " AND idestacion = " . $this->eorigen;
+        $this->codeOrg =  $this->find($query);   
+        $query = "SELECT code FROM gi_ave.EstacionCiudad where idciudad = " . $this->cdestino .
+                " AND idestacion = " . $this->edestino;
+        $this->codeDes =  $this->find($query);   
+    }
     Public function descuentosTarjeta() {    
         $sql = "SELECT gi_ave.Tarjeta_de_Descuento.id,gi_ave.Tarjeta_de_Descuento.descuento FROM gi_ave.Tarjeta_de_Descuento";
         $BD2 = new BDatosConexion();
@@ -127,6 +138,10 @@ class BDBusqueda {
     }
     Public function filaTrayecto()
     {
+        $corg = "";
+        $eorg = "";
+        $cdes = "";
+        $edes = "";
         echo  "<tr><td>";
         echo  "ID-".$this->id_trayecto;
         echo "</td><td>";       
@@ -134,22 +149,37 @@ class BDBusqueda {
         echo  "" . $this->id_tren . "-" . $this->find($query);           
         
         echo "</td><td>";       
-        $query = "SELECT code FROM gi_ave.EstacionCiudad where idciudad = " . $this->corigen .
-                " AND idestacion = " . $this->eorigen;
-        echo  $this->find($query);   
-        echo "</td><td>"; 
-        $query = "SELECT salida FROM gi_ave.Tramo where Estacion_Ciudad_id_Origen = " . $this->corigen .
-                " AND Estacion_id_Origen = " . $this->eorigen .
+        
+        if($this->option == "Pida")
+        {
+            echo $this->codeOrg;
+            $corg = $this->corigen;
+            $eorg = $this->eorigen;
+            $cdes = $this->cdestino;
+            $edes = $this->edestino;
+        }
+        else
+        {
+            echo $this->codeDes;
+            $corg = $this->cdestino;
+            $eorg = $this->edestino;
+            $cdes = $this->corigen;
+            $edes = $this->eorigen;
+        }
+         echo "</td><td>"; 
+        $query = "SELECT salida FROM gi_ave.Tramo where Estacion_Ciudad_id_Origen = " . $corg .
+                " AND Estacion_id_Origen = " . $eorg .
                 " AND Trayecto_id = " . $this->id_trayecto;
 
         echo  "" . substr($this->find($query),11,5);   
         echo "</td><td>";       
-        $query = "SELECT code FROM gi_ave.EstacionCiudad where idciudad = " . $this->cdestino .
-                " AND idestacion = " . $this->edestino;
-        echo  $this->find($query);   
+         if($this->option == "Pida")
+            echo $this->codeDes;
+        else
+            echo $this->codeOrg;
         echo "</td><td>";         
-        $query = "SELECT llegada FROM gi_ave.Tramo where Estacion_Ciudad_id_Destino = " . $this->cdestino .
-                " AND Estacion_id_Destino = " . $this->edestino .
+        $query = "SELECT llegada FROM gi_ave.Tramo where Estacion_Ciudad_id_Destino = " . $cdes .
+                " AND Estacion_id_Destino = " . $edes .
                 " AND Trayecto_id = " . $this->id_trayecto;
             echo  "" . substr($this->find($query),11,5);   
         echo "</td><td>";        
@@ -157,7 +187,7 @@ class BDBusqueda {
         echo "<br><input type='radio' name='" . $this->option . "'/>Tarjeta Joven: " . $this->precioT * (1-$this->descJoven) . " euros";
         echo "<br><input type='radio' name='" . $this->option . "'/>Tarjeta Dorada: " . $this->precioT * (1-$this->descViejo). " euros";
         echo "</td><td>";        
-        echo "<input name='radio' type='radio' name='" . $this->option . "'/> " . $this->precioB . " euros";       
+        echo "<input type='radio' name='" . $this->option . "'/> " . $this->precioB . " euros";       
         echo "<br><input type='radio' name='" . $this->option . "'/>Tarjeta Joven: " . $this->precioB * (1-$this->descJoven) . " euros";
         echo "<br><input type='radio' name='" . $this->option . "'/>Tarjeta Dorada: " . $this->precioB * (1-$this->descViejo). " euros";
        /*echo "</td><td>";
@@ -180,6 +210,7 @@ class BDBusqueda {
         $this->hvuelta = $hregreso;
         $this->idaVuelta = $idaVuelta;
         $this->viajeros = $viajeros;
+        $this->CodesCiudades();
         $query_ida = "call gi_ave.Consulta_Viaje(".$eorigen.",".$edestino.",".$corigen.
          ",".$cdestino.",'".$hsalida."'," . $viajeros . ")"; 
         $this->option = "Pida";
@@ -195,6 +226,7 @@ class BDBusqueda {
     Public function Ida($query_ida) {
         $connection = mysqli_connect("bbdd.dlsi.ua.es", "gi_ave", ".gi_ave.", "gi_ave", "3306");               
         //run the store proc
+ 
         $result = mysqli_query($connection, $query_ida) or die("Query fail: " . mysqli_error());
         //$result=$this->BD->Query("call gi_ave.Consulta_Viaje(1,4,1,4,'2014-03-10')");
         //loop the result set
