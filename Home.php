@@ -111,6 +111,19 @@ Destino
                                 <option value = "22:00">22:00</option>
                                 <option value = "23:00">23:00</option>
                 </select></p>
+                Viajeros:
+                <select name="viajeros">
+                <option value = "1">1</option>
+                <option value = "2">2</option>
+                <option value = "3">3</option>
+                <option value = "4">4</option>
+                <option value = "5">5</option>
+                <option value = "6">6</option>
+                <option value = "7">7</option>
+                <option value = "8">8</option>
+                <option value = "9">9</option>
+               
+</select></p> 
 <p><input name="tarjetaJoven" type="checkbox" class="buttom" value="TJ" id="tarjetaJoven" /><label for="tarjetaJoven">Tarjeta Joven</label>
 <input name="tarjetaDorada" type="checkbox" class="buttom2"  value="TD" id="tarjetaDorada" /><label for="tarjetaDorada" class="buttom3">Tarjeta Dorada</label></p>
 <p>

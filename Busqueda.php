@@ -25,9 +25,10 @@ $edestino = substr($destino, 0,$pos);
 $cdestino = substr($destino, $pos+1, strlen($destino)-$pos);
 $hsalida  = $FechaIdaSel . " " . $_POST["HoraIdaSel"];
 $hvuelta  = $FechaVueltaSel . " " . $_POST["HoraVueltaSel"];
+$viajeros = $_POST["viajeros"];
 
 $busqueda->codigoPromocional($codPromocional, $FechaIdaSel);
-$busqueda->Consulta($eorigen,$edestino,$corigen,$cdestino,$hsalida,$hvuelta,$idavuelta,1);
+$busqueda->Consulta($eorigen,$edestino,$corigen,$cdestino,$hsalida,$hvuelta,$idavuelta,$viajeros);
 
 
 
