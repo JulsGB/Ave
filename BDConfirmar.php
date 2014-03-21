@@ -11,6 +11,7 @@ function getRealIP() {
 require_once ("./BDatosConexion.php");
 $Ida = $_POST["Pida"];
 $Vuelta = $_POST["Pvuelta"];
+$codPromocional = $_POST["PromocionId"];
 $ip = getRealIP();
 
 
@@ -42,14 +43,32 @@ class BDConfirmar {
     private $claseVuelta;
     private $descuentoVuelta;
     private $precioVuelta;
+    private $idReserva;
     private $ip;
+    private $codPromocional;
 
 
     //creamos una un objeto de base de datos
     public function __construct() {
         $this->BD = new BDatosConexion();
     }
-    public function setRerserva($ida,$vuelta,$ip)
+    public function registrarReserva()
+    {
+        $connection = mysqli_connect("bbdd.dlsi.ua.es", "gi_ave", ".gi_ave.", "gi_ave", "3306");               
+        $date = date('Y-m-s h:i:s', time());
+        if (!$connection) {
+            die('No se pudo conectar: ' . mysql_error());
+        }
+        mysql_select_db('gi_ave');
+        $sql = "INSERT INTO `gi_ave`.`Reserva`(`fecha`,`cliente`,`estado`,`ip`,`Codigo_Promocional_id`)" .
+        "VALUES ('" . $date . "','Cliente Web',false,'" . $this->ip . "'," . $this->codPromocional . ")";
+
+
+        mysql_query($sql);
+        $this->idReserva = mysql_insert_id();
+echo $this->idReserva;
+    }
+    public function setRerserva($ida,$vuelta,$ip,$codPromocional)
     {
         $pos = strpos($ida,";");
         $this->trayectoIda = substr($ida, 0,$pos);
@@ -142,12 +161,18 @@ class BDConfirmar {
             $this->precioVuelta = substr($vuelta, 0,$pos);
             $vuelta = substr($vuelta, $pos+1,strlen($vuelta)-$pos);
         }    
-        $this->ip = $ip;    
+        $this->ip = $ip; 
+        if($codPromocional)
+         $this->codPromocional = $codPromocional;
+        else
+          $this->codPromocional = 0;
+        $this->registrarReserva();
     }
+    
 
 }
 
 $confirmacion = new BDConfirmar();
-$confirmacion->setRerserva($Ida,$Vuelta,$ip);
+$confirmacion->setRerserva($Ida,$Vuelta,$ip,$codPromocional);
 
 ?>

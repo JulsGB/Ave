@@ -38,7 +38,10 @@ class BDBusqueda {
     private $codeOrg;
     private $codeDes;
     private $option;
-    
+    private $codPromocional; 
+
+
+
 
     //creamos una un objeto de base de datos
     public function __construct() {
@@ -252,6 +255,7 @@ class BDBusqueda {
         else {
             echo "<input type ='hidden' name = 'Pvuelta' value=''/>";
         }
+         echo "<input type ='hidden' name = 'PromocionId' value='" . $this->codPromocional . "'/>";
          echo    '<tr><td align=center colspan=8><input type="submit" value="Confirmar"></td></tr></table>';
     }
     Public function Ida($query_ida) {
