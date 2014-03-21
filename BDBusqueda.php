@@ -142,6 +142,9 @@ class BDBusqueda {
         $eorg = "";
         $cdes = "";
         $edes = "";
+        $direccion;
+        $salida;
+        $llegada;
         echo  "<tr><td>";
         echo  "ID-".$this->id_trayecto;
         echo "</td><td>";       
@@ -170,8 +173,8 @@ class BDBusqueda {
         $query = "SELECT salida FROM gi_ave.Tramo where Estacion_Ciudad_id_Origen = " . $corg .
                 " AND Estacion_id_Origen = " . $eorg .
                 " AND Trayecto_id = " . $this->id_trayecto;
-
-        echo  "" . substr($this->find($query),11,5);   
+         $salida = $this->find($query);
+        echo  "" . substr($salida,11,5);   
         echo "</td><td>";       
          if($this->option == "Pida")
             echo $this->codeDes;
@@ -181,15 +184,39 @@ class BDBusqueda {
         $query = "SELECT llegada FROM gi_ave.Tramo where Estacion_Ciudad_id_Destino = " . $cdes .
                 " AND Estacion_id_Destino = " . $edes .
                 " AND Trayecto_id = " . $this->id_trayecto;
-            echo  "" . substr($this->find($query),11,5);   
-        echo "</td><td>";        
-        echo "<input type='radio' name='" . $this->option . "'/> " . $this->precioT . " euros";       
-        echo "<br><input type='radio' name='" . $this->option . "'/>Tarjeta Joven: " . $this->precioT * (1-$this->descJoven) . " euros";
-        echo "<br><input type='radio' name='" . $this->option . "'/>Tarjeta Dorada: " . $this->precioT * (1-$this->descViejo). " euros";
-        echo "</td><td>";        
-        echo "<input type='radio' name='" . $this->option . "'/> " . $this->precioB . " euros";       
-        echo "<br><input type='radio' name='" . $this->option . "'/>Tarjeta Joven: " . $this->precioB * (1-$this->descJoven) . " euros";
-        echo "<br><input type='radio' name='" . $this->option . "'/>Tarjeta Dorada: " . $this->precioB * (1-$this->descViejo). " euros";
+        $llegada = $this->find($query);
+        echo  "" . substr($llegada,11,5);   
+        echo "</td><td>";
+        if($this->option == "Pida")
+                $direccion = 1;
+            else 
+                $direccion = 2;
+        $value = $this->id_trayecto  . ";". $corg  . ";" . $eorg  . ";" . $cdes . ";" . $edes . 
+                ";" . $salida . ";" . $llegada .";";
+        $descJ = 1-$this->descJoven;        
+        $descV = 1-$this->descViejo;
+        $descJV = $this->descJoven;        
+        $descVV = $this->descViejo;
+                
+        
+        
+        if($this->mostrarT)
+        {    
+            $precioJ = $this->precioT * $descJ;
+            $precioV = $this->precioT * $descV;
+            echo "<input type='radio' name='" . $this->option . "' value ='" . $value . "N;T;0;" . $this->precioT . ";'/> " . $this->precioT . " euros";       
+            echo "<br><input type='radio' name='" . $this->option . "' value ='" . $value . "J;T;" . $descJV  . ";" . $precioJ . ";'/>Tarjeta Joven: " . $precioJ . " euros";
+            echo "<br><input type='radio' name='" . $this->option . "' value ='" . $value . "V;T;" . $descVV  . ";" . $precioV . ";'/>Tarjeta Joven: " . $precioV . " euros";
+        }
+        echo "</td><td>"; 
+        if($this->mostrarB)
+        {
+            $precioJB = $this->precioB * $descJ;        
+            $precioVB = $this->precioB * $descV;
+            echo "<input type='radio' name='" . $this->option . "' value ='" . $value . "N;B;0;" . $this->precioT . ";'/> " . $this->precioB . " euros";       
+            echo "<br><input type='radio' name='" . $this->option . "' value ='" . $value . "J;B;" . $descJV  . ";" . $precioJB . ";'/>Tarjeta Joven: " . $precioJB . " euros";
+            echo "<br><input type='radio' name='" . $this->option . "' value ='" . $value . "V;B;" . $descVV  . ";" . $precioVB . ";'/>Tarjeta Joven: " . $precioVB . " euros";
+        }
        /*echo "</td><td>";
        echo $this->PrintImgCiudadOrd();
        echo "</td><td>";
@@ -222,6 +249,10 @@ class BDBusqueda {
             $this->option = "Pvuelta";
             $this->Vuelta($query_ida);
          }
+        else {
+            echo "<input type ='hidden' name = 'Pvuelta' value=''/>";
+        }
+         echo    '<tr><td align=center colspan=8><input type="submit" value="Confirmar"></td></tr></table>';
     }
     Public function Ida($query_ida) {
         $connection = mysqli_connect("bbdd.dlsi.ua.es", "gi_ave", ".gi_ave.", "gi_ave", "3306");               
@@ -231,7 +262,7 @@ class BDBusqueda {
         //$result=$this->BD->Query("call gi_ave.Consulta_Viaje(1,4,1,4,'2014-03-10')");
         //loop the result set
         $this->descuentosTarjeta();
-        echo '<table border = "1"><form id="confirmar" name="confirmar" method="post" action="confirmar.php">';
+        echo '<table border = "1"><form id="confirmar" name="confirmar" method="post" action="Confirmar.php">';
         echo '<tr><td align=center colspan=8> IDA </td>' . 
                 '<tr>' .$this->PrintImgCiudadOrd() .    
                 '' .
@@ -243,7 +274,7 @@ class BDBusqueda {
             $this->id_trayecto =  $row[0];            
             $this->id_tren = $row[1];
             $this->precioT = $row[2]* (1-$this->descuento);
-            $this->precioB = $row[3]* (1-$this->descuento);            
+            $this->precioB = $row[3]* (1-$this->descuento);               
             $this->mostrarT = $row[4]>=$this->viajeros;
             $this->mostrarB = $row[5]>=$this->viajeros;          
             $this->filaTrayecto();
