@@ -42,6 +42,7 @@ class Billete
 
 class BDConfirmar {
 
+    
     private $BD = null;
     private $trayectoIda;
     private $idTrenIda;
@@ -76,7 +77,7 @@ class BDConfirmar {
     private $vuelta;
     private $BilletesIda;
     private $BilletesVuelta;
-    
+    private $tmpStr;
     
 
 
@@ -108,6 +109,7 @@ class BDConfirmar {
         $this->idBilletesVuelta = array($this->Viajeros);
         $this->BilletesIda = array($this->Viajeros);
         $this->BilletesVuelta = array($this->Viajeros);
+        
         
         $connection = mysqli_connect("bbdd.dlsi.ua.es", "gi_ave", ".gi_ave.", "gi_ave", "3306");               
         $date = date('Y-m-s h:i:s', time());
@@ -230,109 +232,57 @@ class BDConfirmar {
              }
         }    
              
-            
+    }     
+    private function cortarCadena()
+    {
+        $pos = strpos($this->tmpStr,";");
+        $resultado = substr($this->tmpStr, 0,$pos);
+        $this->tmpStr = substr($this->tmpStr, $pos+1,strlen($this->tmpStr)-$pos);
+        return $resultado;
+        
     }
+    
+    private function extraer_ida()
+    {
+        $this->trayectoIda = $this->cortarCadena();
+        $this->idTrenIda = $this->cortarCadena();
+        $this->corgIda = $this->cortarCadena();
+        $this->eorgIda = $this->cortarCadena();
+        $this->cdesIda = $this->cortarCadena();
+        $this->edesIda = $this->cortarCadena();
+        $this->salidaIda = $this->cortarCadena();
+        $this->llegadaIda = $this->cortarCadena();
+        $this->tarjetaIda = $this->cortarCadena();
+        $this->claseIda = $this->cortarCadena();
+        $this->descuentoIda = $this->cortarCadena();
+        $this->precioIda = $this->cortarCadena();
+    }
+    private function extraer_vuelta()
+    {
+        $this->trayectoVuelta = $this->cortarCadena();
+        $this->idTrenIda = $this->cortarCadena();
+        $this->corgVuelta = $this->cortarCadena();
+        $this->eorgVuelta = $this->cortarCadena();
+        $this->cdesVuelta = $this->cortarCadena();
+        $this->edesVuelta = $this->cortarCadena();
+        $this->salidaVuelta = $this->cortarCadena();
+        $this->llegadaVuelta = $this->cortarCadena();
+        $this->tarjetaVuelta = $this->cortarCadena();
+        $this->claseVuelta = $this->cortarCadena();
+        $this->descuentoVuelta = $this->cortarCadena();
+        $this->precioVuelta = $this->cortarCadena();
+        
+    }
+               
     public function setReserva($ida, $vuelta, $ip, $codPromocional, $viajeros)
     {
-        $pos = strpos($ida,";");
-        $this->trayectoIda = substr($ida, 0,$pos);
-        $ida = substr($ida, $pos+1,strlen($ida)-$pos);
-        
-        $pos = strpos($ida,";");
-        $this->idTrenIda = substr($ida, 0,$pos);
-        $ida = substr($ida, $pos+1,strlen($ida)-$pos);
-
-        $pos = strpos($ida,";");
-        $this->corgIda = substr($ida, 0,$pos);
-        $ida = substr($ida, $pos+1,strlen($ida)-$pos);        
-        
-        $pos = strpos($ida,";");
-        $this->eorgIda = substr($ida, 0,$pos);
-        $ida = substr($ida, $pos+1,strlen($ida)-$pos);
-
-        $pos = strpos($ida,";");
-        $this->cdesIda = substr($ida, 0,$pos);
-        $ida = substr($ida, $pos+1,strlen($ida)-$pos);
-
-        $pos = strpos($ida,";");
-        $this->edesIda = substr($ida, 0,$pos);
-        $ida = substr($ida, $pos+1,strlen($ida)-$pos);
-
-        $pos = strpos($ida,";");
-        $this->salidaIda = substr($ida, 0,$pos);
-        $ida = substr($ida, $pos+1,strlen($ida)-$pos);
-
-        $pos = strpos($ida,";");
-        $this->llegadaIda = substr($ida, 0,$pos);
-        $ida = substr($ida, $pos+1,strlen($ida)-$pos);
-
-        $pos = strpos($ida,";");
-        $this->tarjetaIda = substr($ida, 0,$pos);
-        $ida = substr($ida, $pos+1,strlen($ida)-$pos);
-
-        $pos = strpos($ida,";");
-        $this->claseIda = substr($ida, 0,$pos);
-        $ida = substr($ida, $pos+1,strlen($ida)-$pos);
-
-        $pos = strpos($ida,";");
-        $this->descuentoIda = substr($ida, 0,$pos);
-        $ida = substr($ida, $pos+1,strlen($ida)-$pos);
-
-        $pos = strpos($ida,";");
-        $this->precioIda = substr($ida, 0,$pos);
-        $ida = substr($ida, $pos+1,strlen($ida)-$pos);
-
+        $this->tmpStr = $ida;
+        $this->extraer_ida();    
         if($vuelta != "")
         {
+            $this->tmpStr = $vuelta;
             $this->vuelta = true;
-            
-            $pos = strpos($vuelta,";");
-            $this->trayectoVuelta = substr($vuelta, 0,$pos);
-            $vuelta = substr($vuelta, $pos+1,strlen($vuelta)-$pos);
-            
-            $pos = strpos($ida,";");
-            $this->idTrenVuelta = substr($vuelta, 0,$pos);
-            $ida = substr($ida, $pos+1,strlen($ida)-$pos);
-
-            $pos = strpos($vuelta,";");
-            $this->corgVuelta = substr($vuelta, 0,$pos);
-            $vuelta = substr($vuelta, $pos+1,strlen($vuelta)-$pos);
-
-            $pos = strpos($vuelta,";");
-            $this->eorgVuelta = substr($vuelta, 0,$pos);
-            $vuelta = substr($vuelta, $pos+1,strlen($vuelta)-$pos);
-
-            $pos = strpos($vuelta,";");
-            $this->cdesVuelta = substr($vuelta, 0,$pos);
-            $vuelta = substr($vuelta, $pos+1,strlen($vuelta)-$pos);
-
-            $pos = strpos($vuelta,";");
-            $this->edesVuelta = substr($vuelta, 0,$pos);
-            $vuelta = substr($vuelta, $pos+1,strlen($vuelta)-$pos);
-
-            $pos = strpos($vuelta,";");
-            $this->salidaVuelta = substr($vuelta, 0,$pos);
-            $vuelta = substr($vuelta, $pos+1,strlen($vuelta)-$pos);
-
-            $pos = strpos($vuelta,";");
-            $this->llegadaVuelta = substr($vuelta, 0,$pos);
-            $vuelta = substr($vuelta, $pos+1,strlen($vuelta)-$pos);
-
-            $pos = strpos($vuelta,";");
-            $this->tarjetaVuelta = substr($vuelta, 0,$pos);
-            $vuelta = substr($vuelta, $pos+1,strlen($vuelta)-$pos);
-
-            $pos = strpos($vuelta,";");
-            $this->claseVuelta = substr($vuelta, 0,$pos);
-            $vuelta = substr($vuelta, $pos+1,strlen($vuelta)-$pos);
-
-            $pos = strpos($vuelta,";");
-            $this->descuentoVuelta = substr($vuelta, 0,$pos);
-            $vuelta = substr($vuelta, $pos+1,strlen($vuelta)-$pos);
-
-            $pos = strpos($vuelta,";");
-            $this->precioVuelta = substr($vuelta, 0,$pos);
-            $vuelta = substr($vuelta, $pos+1,strlen($vuelta)-$pos);
+            $this->extraer_vuelta();       
         }    
         else 
         {
@@ -340,9 +290,9 @@ class BDConfirmar {
         }
         $this->ip = $ip; 
         if($codPromocional)
-         $this->codPromocional = $codPromocional;
+            $this->codPromocional = $codPromocional;
         else
-          $this->codPromocional = 0;
+            $this->codPromocional = 0;
         $this->Viajeros = $viajeros;
         $this->registrarReserva();
     }
