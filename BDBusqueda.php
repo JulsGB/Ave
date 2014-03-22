@@ -18,6 +18,7 @@ require_once ("./BDatosConexion.php");
 class BDBusqueda {
 
     private $BD = null;
+    private $te;
     private $id_trayecto;
     private $id_tren;
     private $precioT;
