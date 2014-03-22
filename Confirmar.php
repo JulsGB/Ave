@@ -1,40 +1,54 @@
 <?php
-require_once ("./BDConfirmar.php");
+    header("Content-type: text/xml");
+    echo '<?xml version="1.0" encoding="ISO-8859-1"?>';
+    echo '<!DOCTYPE BILLETE SYSTEM "./billetedtd.dtd">';
+
+    require_once ("./BDConfirmar.php");
 
     $numTickets = $confirmacion->getViajeros();
     $infoIda = $confirmacion->getBilletesIda();
     $infoVuelta = $confirmacion->getBilletesVuelta();        
-    
+
+    echo '<reserva>';
     for($i=1; $i<=$numTickets; $i++)
     {
-        echo "Reserva: ".$infoIda{$i}->reserva."<br/>";
-        echo "Fecha: ".$infoIda{$i}->fecha."<br/>";
-        echo "Tren: ".$infoIda{$i}->tren."<br/>";
-        echo "Id: ".$infoIda{$i}->identificador."<br/>";
-        echo "Origen: ".$infoIda{$i}->estacion_origen."<br/>";
-        echo "Salida: ".$infoIda{$i}->Hida."<br/>";
-        echo "Destino: ".$infoIda{$i}->estacion_destino."<br/>";
-        echo "Llegada: ".$infoIda{$i}->Hllegada."<br/>";
-        echo "Tarjeta Descuento: ".$infoIda{$i}->clase."<br/>";
-        echo "Tarjeta: ".$infoIda{$i}->tarjeta."<br/>";
-        echo "Precio: ".$infoIda{$i}->precio."<br/>";
+        echo '<billete>';
+            echo'<reserva>'.$infoIda{$i}->reserva.'</reserva>';
+            echo'<fecha>'.$infoIda{$i}->fecha.'</fecha>';
+            echo'<tren>'.$infoIda{$i}->tren.'</tren>';
+            echo'<trayecto>';
+                echo'<identificador>'.$infoIda{$i}->identificador.'</identificador>';
+                echo'<estacion_origen>'.$infoIda{$i}->estacion_origen.'</estacion_origen>';
+                echo'<hora_salida>'.$infoIda{$i}->Hida.'</hora_salida>';
+                echo'<estacion_destino>'.$infoIda{$i}->estacion_destino.'</estacion_destino>';
+                echo'<hora_llegada>'.$infoIda{$i}->Hllegada.'</hora_llegada>';
+            echo'</trayecto>';
+            echo'<clase>'.$infoIda{$i}->clase.'</clase>';
+            echo'<tarjeta>'.$infoIda{$i}->tarjeta.'</tarjeta>';
+            echo'<precio>'.$infoIda{$i}->precio.'</precio>';
+        echo '</billete>';
     }
-    echo "<br/>";
+
     if($Vuelta!="")
     {
         for($i=1; $i<=$numTickets; $i++)
         {
-            echo "Reserva: ".$infoVuelta{$i}->reserva."<br/>";
-            echo "Fecha: ".$infoVuelta{$i}->fecha."<br/>";
-            echo "Tren: ".$infoVuelta{$i}->tren."<br/>";
-            echo "Id: ".$infoVuelta{$i}->identificador."<br/>";
-            echo "Origen: ".$infoVuelta{$i}->estacion_origen."<br/>";
-            echo "Salida: ".$infoVuelta{$i}->Hida."<br/>";
-            echo "Destino: ".$infoVuelta{$i}->estacion_destino."<br/>";
-            echo "Llegada: ".$infoVuelta{$i}->Hllegada."<br/>";
-            echo "Tarjeta Descuento: ".$infoVuelta{$i}->clase."<br/>";
-            echo "Tarjeta: ".$infoVuelta{$i}->tarjeta."<br/>";
-            echo "Precio: ".$infoVuelta{$i}->precio."<br/>";
+            echo '<billete>';
+                echo'<reserva>'.$infoVuelta{$i}->reserva.'</reserva>';
+                echo'<fecha>'.$infoVuelta{$i}->fecha.'</fecha>';
+                echo'<tren>'.$infoVuelta{$i}->tren.'</tren>';
+                echo'<trayecto>';
+                    echo'<identificador>'.$infoVuelta{$i}->identificador.'</identificador>';
+                    echo'<estacion_origen>'.$infoVuelta{$i}->estacion_origen.'</estacion_origen>';
+                    echo'<hora_salida>'.$infoVuelta{$i}->Hida.'</hora_salida>';
+                    echo'<estacion_destino>'.$infoVuelta{$i}->estacion_destino.'</estacion_destino>';
+                    echo'<hora_llegada>'.$infoVuelta{$i}->Hllegada.'</hora_llegada>';
+                echo'</trayecto>';
+                echo'<clase>'.$infoVuelta{$i}->clase.'</clase>';
+                echo'<tarjeta>'.$infoVuelta{$i}->tarjeta.'</tarjeta>';
+                echo'<precio>'.$infoVuelta{$i}->precio.'</precio>';
+            echo '</billete>';
         }
     }
+    echo '</reserva>';
 ?>
