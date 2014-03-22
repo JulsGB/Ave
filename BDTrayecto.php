@@ -29,8 +29,8 @@ class BDTrayecto {
     
     }
     
-    public function DameCiudad($ciudad){
-     
+    public function DameCiudad($idciudad){
+        $sql="select nombre from Ciudad where id ='".$idciudad."'";
         return $nombre;
     }   
     }

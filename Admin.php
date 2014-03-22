@@ -14,7 +14,7 @@ $pass = $_POST["password"];
     </head>
     <body>
         <form method="post" enctype="multipart/form-data" action="AnyadirAdmin.php">        
-            
+
 
 
 
@@ -30,36 +30,72 @@ $pass = $_POST["password"];
                 $estacion = new Estacion();
                 $ciudad = new Estacion();
                 $ciudades = $estacion->DameNombreCiudades();
-              ?> 
-                 <table>
+                ?> 
+            <label> SUBIR IMAGENES</label>
+            <br>
+            <br>
+                <table border="1">
+                    <tr>
+                        <td>Selecciona Ciudad</td><td>Selecciona Archivo</td>
+                    </tr>
+                    <tr>
+                        <td><SELECT NAME="Ciudad">';
+                                <?
+                                foreach ($ciudades as $ciudad) {
+                                    echo "<option  value= \"" . $ciudad->getCiudad() . "\">" . $ciudad->getCiudad() . "</option>";
+                                }
+                                echo'</SELECT>';
+                                ?>
+                        </td>
+                        <td><input type=file size=60 name="imagen"></td>
 
-                <tr>
-                    <td><?echo'<label> Ciudad</label>';?></td>
-                    <td><?echo' <SELECT NAME="Ciudad">';
+                    </tr>
+                </table>
 
-                       foreach ($ciudades as $ciudad) {
-                       echo "<option  value= \"" . $ciudad->getCiudad() . "\">" . $ciudad->getCiudad() . "</option>";
-                        }
-                        echo'</SELECT>';?>
-                    </td>
-                    <td><input type=file size=60 name="imagen"></td>
-                    <td> <input type="submit" value="SubirImagen"></td>
-                </tr>
-                <tr>
-                    <td><?echo'<label>Trayecto</label>';?></td>
-                    <td><?echo' <SELECT NAME="Ciudad">';
+                <input type="submit" value="SubirImagen">
+                 <br> 
+                 <br> 
+                 <br> 
+                 
+                 <label> SUBIR VIDEOS</label>
+                 <br>
+                 <br>
+                <table border="1">
+                    <tr>
 
-                       foreach ($ciudades as $ciudad) {
-                       echo "<option  value= \"" . $ciudad->getCiudad() . "\">" . $ciudad->getCiudad() . "</option>";
-                        }
-                        echo'</SELECT>';?>
-                    </td>
-                    <td><input type=file size=60 name="video"></td>
-                    <td> <input type="submit" value="SubirVideo"></td>
-                </tr>
-            </table>
+                        <td><label>Origen</label></td>
+                        <td><label>Destino</label></td>
+                        <td><label>Selecciona Archivo</label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <SELECT NAME="CiudadOrigen">
+                                <?
+                                foreach ($ciudades as $ciudad) {
+                                    echo "<option  value= \"" . $ciudad->getCiudad() . "\">" . $ciudad->getCiudad() . "</option>";
+                                }
+                                echo'</SELECT>';
+                                ?>
+                        </td>
 
-            <?    
+
+
+                        <td><?
+                            echo' <SELECT NAME="CiudadDestino">';
+
+                            foreach ($ciudades as $ciudad) {
+                                echo "<option  value= \"" . $ciudad->getCiudad() . "\">" . $ciudad->getCiudad() . "</option>";
+                            }
+                            echo'</SELECT>';
+                                ?>
+                        </td>
+                        <td><input type=file size=60 name="video"></td>
+                    </tr>
+
+                </table>
+                <input type="submit" value="SubirVideo">
+
+                <?
             } else {
 
                 echo"<script>
@@ -69,7 +105,7 @@ $pass = $_POST["password"];
                 echo"<script>window.location='Home.php'</script>";
             }
             ?>
-           
+
         </form>
     </body>
 
