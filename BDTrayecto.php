@@ -25,6 +25,7 @@ class BDTrayecto {
     public function __destruct() {
         
     }
+    
 
     public function DameTrayectos($ciudadOrigen, $ciudadDestino) {
         $idciudadOrigen = $this->DameCiudad($ciudadOrigen);
@@ -54,7 +55,17 @@ class BDTrayecto {
         }
         return $result;
     }
-
+    public function DameNombre($ciudad) {
+        $sql = "select nombre from Ciudad where id ='" . $ciudad . "'";
+        $datos = $this->BD->Query($sql);
+        $result = null; //creamos un nuevo usuario y le insertamos los valores de la BD 
+        if (!$datos->EOF) {
+            $result = $datos->fields["0"];
+            return $result;
+        }
+        return $result;
+    }
+    
     public function AgregaUrlTrailer($url, $idTrayectos) {
 
         foreach ($idTrayectos as $value) {
@@ -67,6 +78,21 @@ class BDTrayecto {
             }
         }
         return $update;
+    }
+
+    public function DameTrailer($id) {
+
+
+        $sql = ("select url_trailer_peli from Trayecto where id='" . $id. "'");
+        $datos = $this->BD->Execute($sql);
+        $result=false;
+        if (!$datos->EOF) {
+            
+            $result=($datos->fields["url_trailer_peli"]);
+            
+        }
+
+        return $result;
     }
 
 }

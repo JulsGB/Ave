@@ -24,6 +24,7 @@ class Trayecto {
     private $id = null;
     private $ciudadOrigen = null;
     private $ciudadDestino = null;
+    private $trailer=null;
     //-----------------------------------METODOS------------------------------//
     //constructor
 
@@ -42,7 +43,10 @@ class Trayecto {
         $returnValue = $this->id;
         return $returnValue;
     }
-
+    public function getTrailer() {
+        $returnValue = $this->id;
+        return $returnValue;
+    }
 
     /**
      * @access public
@@ -65,6 +69,9 @@ class Trayecto {
     //-------------------SETTERS------------------//
     public function setId($i) {
         $this->id = $i;
+    }   
+    public function setTrailer($i) {
+        $this->trailer = $i;
     }
 
 
@@ -93,10 +100,24 @@ class Trayecto {
         $result = $objbd->DameTrayectos($ciudadOrigen,$ciudadDestino);
         return $result;
     }
+     public function DameNombre($id){
+         //creamos un objeto transaccional con la base de datos
+        $objbd = new BDTrayecto();
+        //obtenenemos el resultado
+        $result = $objbd->DameNombre($id);
+        return $result;
+    }
     public function AgregaUrlTrailer($url,$idTrayectos){
         $objbd = new BDTrayecto();
         //obtenenemos el resultado
         $result = $objbd->AgregaUrlTrailer($url,$idTrayectos);
+        return $result;
+    }
+     public function DameTrailer($id){
+         //creamos un objeto transaccional con la base de datos
+        $objbd = new BDTrayecto();
+        //obtenenemos el resultado
+        $result = $objbd->DameTrailer($id);
         return $result;
     }
 
