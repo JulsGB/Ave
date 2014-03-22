@@ -24,6 +24,7 @@ class BDEstacion {
         $result = null;
         $sql = 'SELECT * FROM estacion ;';
         $datos = $this->BD->Query($sql);
+                
         //creamos un nuevo usuario y le insertamos los valores de la BD 
 
         while (!$datos->EOF) {
@@ -137,7 +138,14 @@ class BDEstacion {
         }
         return $num;
     }
-
+    public function DameNombrePorID($id) 
+    {        
+            $sql = 'SELECT nombre FROM Estacion where id=' . $id . ';';
+            $datos = $this->BD->Query($sql);
+            //creamos un nuevo usuario y le insertamos los valores de la BD 
+            $result = $datos->fields["nombre"];
+            return $result;
+    }
 }
 
 ?>
