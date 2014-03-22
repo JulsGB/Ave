@@ -1,4 +1,5 @@
 <?php
+require_once('./Trayecto.php');
 
 $tipoBD = "mysql";
 $hostBD = "bbdd.dlsi.ua.es:3306";
@@ -51,8 +52,12 @@ elseif (!empty($_FILES["video"]["tmp_name"])){
 
             echo "Guardado en: " . "Videos/" . $_FILES['video']['name'];
         }
-        
-    }
+        $trayecto= new Trayecto();
+        $idTrayecto=$trayecto->DameTrayectos($CiudadOrigen, $CiudadDestino);
+        $trayecto->AgregaUrlTrailer( "Videos/" . $_FILES['video']['name'], $idTrayecto);
+        foreach ($idTrayecto as $value) {
+        echo('trayectos con trailer: '.$value->getId());
+        }}
  }
  else{
          echo"<script>
