@@ -20,18 +20,21 @@ require_once ("./BDConfirmar.php");
         echo "Precio: ".$infoIda{$i}->precio."<br/>";
     }
     echo "<br/>";
-    for($i=1; $i<=$numTickets; $i++)
+    if($Vuelta!="")
     {
-        echo "Reserva: ".$infoVuelta{$i}->reserva."<br/>";
-        echo "Fecha: ".$infoVuelta{$i}->fecha."<br/>";
-        echo "Tren: ".$infoVuelta{$i}->tren."<br/>";
-        echo "Id: ".$infoVuelta{$i}->identificador."<br/>";
-        echo "Origen: ".$infoVuelta{$i}->estacion_origen."<br/>";
-        echo "Salida: ".$infoVuelta{$i}->Hida."<br/>";
-        echo "Destino: ".$infoVuelta{$i}->estacion_destino."<br/>";
-        echo "Llegada: ".$infoVuelta{$i}->Hllegada."<br/>";
-        echo "Tarjeta Descuento: ".$infoVuelta{$i}->clase."<br/>";
-        echo "Tarjeta: ".$infoVuelta{$i}->tarjeta."<br/>";
-        echo "Precio: ".$infoVuelta{$i}->precio."<br/>";
+        for($i=1; $i<=$numTickets; $i++)
+        {
+            echo "Reserva: ".$infoVuelta{$i}->reserva."<br/>";
+            echo "Fecha: ".$infoVuelta{$i}->fecha."<br/>";
+            echo "Tren: ".$infoVuelta{$i}->tren."<br/>";
+            echo "Id: ".$infoVuelta{$i}->identificador."<br/>";
+            echo "Origen: ".$infoVuelta{$i}->estacion_origen."<br/>";
+            echo "Salida: ".$infoVuelta{$i}->Hida."<br/>";
+            echo "Destino: ".$infoVuelta{$i}->estacion_destino."<br/>";
+            echo "Llegada: ".$infoVuelta{$i}->Hllegada."<br/>";
+            echo "Tarjeta Descuento: ".$infoVuelta{$i}->clase."<br/>";
+            echo "Tarjeta: ".$infoVuelta{$i}->tarjeta."<br/>";
+            echo "Precio: ".$infoVuelta{$i}->precio."<br/>";
+        }
     }
 ?>
