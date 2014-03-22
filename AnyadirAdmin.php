@@ -6,28 +6,61 @@ $userBD = "gi_ave";
 $passBD = ".gi_ave.";
 $schemeBD = "gi_ave";
 $connection = mysqli_connect("bbdd.dlsi.ua.es", "gi_ave", ".gi_ave.", "gi_ave", "3306");
-$Ciudad = $_POST["Ciudad"];
-$imagen = $_FILES["imagen"];
-$image = imagecreatefromjpeg($imagen["tmp_name"]);
-ob_start();
-imagejpeg($image);
-$jpg = ob_get_contents();
-ob_end_clean();
-$jpg = str_replace('##', '##', mysql_escape_string($jpg));
 
-$que = ("UPDATE Ciudad  SET imagen='" . $jpg . "'where nombre='" . $Ciudad . "'");
-$result = mysqli_query($connection, $que);
-if ($result) {
-    echo"<script>
+
+if ($_FILES["imagen"]["tmp_name"]!="") {
+    $imagen = $_FILES["imagen"];
+    $Ciudad = $_POST["Ciudad"];
+    $image = imagecreatefromjpeg($imagen["tmp_name"]);
+    ob_start();
+    imagejpeg($image);
+    $jpg = ob_get_contents();
+    ob_end_clean();
+    $jpg = str_replace('##', '##', mysql_escape_string($jpg));
+    $que = ("UPDATE Ciudad  SET imagen='" . $jpg . "'where nombre='" . $Ciudad . "'");
+    $result = mysqli_query($connection, $que);
+    if ($result) {
+        echo"<script>
                     alert('Imagen guardada!');
                      </script>";
-    echo"<script>window.location='Home.php'</script>";
-} else {
-    echo"<script>
+        echo"<script>window.location='Home.php'</script>";
+    } else {
+        echo"<script>
                     alert('No se ha podido guardar la imagen');
                      </script>";
-    echo"<script>window.location='Home.php'</script>";
+        echo"<script>window.location='Home.php'</script>";
+    }
 }
+
+elseif (!empty($_FILES["video"]["tmp_name"])){
+    
+
+    $CiudadOrigen = $_POST["CiudadOrigen"];
+    $CiudadDestino = $_POST["CiudadDestino"];
+
+    if ($CiudadOrigen == $CiudadDestino) {
+        echo"<script>
+                    alert('La  ciudad de origen y destino deben ser diferentes ');
+                     </script>";
+        echo"<script>window.location='Home.php'</script>";
+    } else {
+        if (file_exists('Videos/' . $_FILES['video']['name'])) {
+            echo 'El archivo ya existe: ' . $_FILES['video']['name'];
+        } else {
+            move_uploaded_file($_FILES['video']['tmp_name'], "Videos/" . $_FILES['video']['name']);
+
+            echo "Guardado en: " . "Videos/" . $_FILES['video']['name'];
+        }
+        
+    }
+ }
+ else{
+         echo"<script>
+                    alert('se debe seleccionar uin video o una imagen');
+                     </script>";
+        echo"<script>window.location='Home.php'</script>";
+    
+ }
 
 /*
  * To change this template, choose Tools | Templates
