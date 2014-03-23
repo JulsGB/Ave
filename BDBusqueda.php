@@ -204,7 +204,7 @@ class BDBusqueda {
             $precioV = $this->precioT * $descV;
             echo "<input type='radio' name='" . $this->option . "' value ='" . $value . "0;Turista;0;" . $this->precioT . ";'/> " . $this->precioT . " euros";
             echo "<br><input type='radio' name='" . $this->option . "' value ='" . $value . "1;Turista;" . $descJV . ";" . $precioJ . ";'/>Tarjeta Joven: " . $precioJ . " euros";
-            echo "<br><input type='radio' name='" . $this->option . "' value ='" . $value . "2;Turista;" . $descVV . ";" . $precioV . ";'/>Tarjeta Joven: " . $precioV . " euros";
+            echo "<br><input type='radio' name='" . $this->option . "' value ='" . $value . "2;Turista;" . $descVV . ";" . $precioV . ";'/>Tarjeta Dorada: " . $precioV . " euros";
         }
         echo "</td><td>";
         if ($this->mostrarB) {
@@ -212,7 +212,7 @@ class BDBusqueda {
             $precioVB = $this->precioB * $descV;
             echo "<input type='radio' name='" . $this->option . "' value ='" . $value . "0;Preferente;0;" . $this->precioT . ";'/> " . $this->precioB . " euros";
             echo "<br><input type='radio' name='" . $this->option . "' value ='" . $value . "1;Preferente;" . $descJV . ";" . $precioJB . ";'/>Tarjeta Joven: " . $precioJB . " euros";
-            echo "<br><input type='radio' name='" . $this->option . "' value ='" . $value . "2;Preferente;" . $descVV . ";" . $precioVB . ";'/>Tarjeta Joven: " . $precioVB . " euros";
+            echo "<br><input type='radio' name='" . $this->option . "' value ='" . $value . "2;Preferente;" . $descVV . ";" . $precioVB . ";'/>Tarjeta Dorada: " . $precioVB . " euros";
         }
         /* echo "</td><td>";
           echo $this->PrintImgCiudadOrd();
