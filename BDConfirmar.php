@@ -314,6 +314,4 @@ class BDConfirmar {
 
 $confirmacion = new BDConfirmar();
 $confirmacion->setReserva($Ida,$Vuelta,$ip,$codPromocional,$Viajeros);
-echo "Cadena ida: ".$Ida."<br/>";
-echo "Cadena vue: ".$Vuelta."<br/>";
 ?>  
