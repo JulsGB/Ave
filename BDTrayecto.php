@@ -84,11 +84,11 @@ class BDTrayecto {
 
 
         $sql = ("select url_trailer_peli from Trayecto where id='" . $id. "'");
-        $datos = $this->BD->Execute($sql);
+        $datos = $this->BD->Query($sql);
         $result=false;
         if (!$datos->EOF) {
             
-            $result=($datos->fields["url_trailer_peli"]);
+            $result=$datos->fields["url_trailer_peli"];
             
         }
 

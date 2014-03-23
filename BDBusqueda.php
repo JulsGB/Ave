@@ -257,7 +257,7 @@ class BDBusqueda {
         $idURL=$trayectoURl->DameTrayectos($Origen,$Destino);
         if($idURL!=null){
             $url=$trayectoURl->DameTrailer($idURL[0]->getId());
-            echo "<label> Mira el Trailer de la Pelicula que podras ver: </label> <embed src='./Videos/Trainspotting - Trailer [sub-esp] HQ.mp4' width='500' height='500' autostart='false' loop='true' /> </embed>";
+            echo "<label> Mira el Trailer de la Pelicula que podras ver: </label> <embed src='./".$url."' width='500' height='500' autostart='false' loop='true' /> </embed>";
         
         }else{
             echo "<label> No Trailer Disponible </label>";
