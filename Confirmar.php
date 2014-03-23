@@ -1,8 +1,9 @@
 <?php
     header("Content-type: text/xml");
     echo '<?xml version="1.0" encoding="ISO-8859-1"?>';
-    echo '<!DOCTYPE BILLETE SYSTEM "./billetedtd.dtd">';
-
+    echo '<?xml-stylesheet type="text/xsl" href="billete.xsl"?>';
+    echo '<!DOCTYPE reserva SYSTEM "./billetedtd.dtd">';
+    
     require_once ("./BDConfirmar.php");
 
     $numTickets = $confirmacion->getViajeros();
@@ -13,7 +14,7 @@
     for($i=1; $i<=$numTickets; $i++)
     {
         echo '<billete>';
-            echo'<reserva>'.$infoIda{$i}->reserva.'</reserva>';
+            echo'<id_reserva>'.$infoIda{$i}->reserva.'</id_reserva>';
             echo'<fecha>'.$infoIda{$i}->fecha.'</fecha>';
             echo'<tren>'.$infoIda{$i}->tren.'</tren>';
             echo'<trayecto>';
@@ -25,7 +26,7 @@
             echo'</trayecto>';
             echo'<clase>'.$infoIda{$i}->clase.'</clase>';
             echo'<tarjeta>'.$infoIda{$i}->tarjeta.'</tarjeta>';
-            echo'<precio>'.$infoIda{$i}->precio.'</precio>';
+            echo'<precio>'.$infoIda{$i}->precio.' euros.</precio>';
         echo '</billete>';
     }
 
@@ -46,7 +47,7 @@
                 echo'</trayecto>';
                 echo'<clase>'.$infoVuelta{$i}->clase.'</clase>';
                 echo'<tarjeta>'.$infoVuelta{$i}->tarjeta.'</tarjeta>';
-                echo'<precio>'.$infoVuelta{$i}->precio.'</precio>';
+                echo'<precio>'.$infoVuelta{$i}->precio.' euros.</precio>';
             echo '</billete>';
         }
     }
