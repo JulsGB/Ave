@@ -232,7 +232,147 @@ class BDConfirmar {
              }
         }    
              
-    }     
+    } 
+    
+     public function registrarReservaConcurrente()
+    {
+        $this->idBilletesIda = array($this->Viajeros);
+        $this->idBilletesVuelta = array($this->Viajeros);
+        $this->BilletesIda = array($this->Viajeros);
+        $this->BilletesVuelta = array($this->Viajeros);
+        $separador = ";<br>";
+        
+        $connection = mysqli_connect("bbdd.dlsi.ua.es", "gi_ave", ".gi_ave.", "gi_ave", "3306");               
+        $date = date('Y-m-s h:i:s', time());
+        if (!$connection) {
+            die('No se pudo conectar: ' . mysql_error());
+        }
+        $sqltmp = "";
+        $sql = "DELIMITER ;<br>";
+        $sql .="START TRANSACTION" . $separador;
+        mysql_select_db('gi_ave');
+        $sql .= "INSERT INTO `gi_ave`.`Reserva`(`fecha`,`cliente`,`estado`,`ip`,`Codigo_Promocional_id`)" .
+        "VALUES ('" . $date . "','Cliente Web',false,'" . $this->ip . "'," . $this->codPromocional . ");\n";
+        $sql .= "SET @reserva = LAST_INSERT_ID()" . $separador;
+        $BDCiudad = new BDCiudad();
+        $BDEstacion = new BDEstacion();
+        
+        for($i = 1;$i<=$this->Viajeros;$i++)
+        {
+            $sql .= "INSERT INTO `gi_ave`.`Billete` " . 
+            "(`descuento`,`Tipo`,`precio_base`,`porcentaje_impuesto`,`PVP`," .
+                    "`coche`,`plaza`,`Tarjeta_de_Descuento_id`,`Reserva_id`,`Clase`,`Viajero`) ".
+            "VALUES(" . $this->descuentoIda . ",1,0,0.21," . $this->precioIda .
+            ",1,2," .$this->tarjetaIda . ",@reserva,'" . $this->claseIda . 
+            "',". $i . ")".$separador;
+           
+             
+             $codigoCiudadOrigen = $BDCiudad->DameCodigoPorID($this->corgIda);
+             $codigoCiudadDestino = $BDCiudad->DameCodigoPorID($this->cdesIda);
+             $nombreCiudadOrigen = $BDCiudad->DameNombrePorID($this->corgIda);
+             $nombreCiudadDestino = $BDCiudad->DameNombrePorID($this->cdesIda);
+             $nombreEstacionOrigen = $BDEstacion->DameNombrePorID($this->eorgIda);
+             $nombreEstacionDestino = $BDEstacion->DameNombrePorID($this->edesIda);
+                         
+             $this->BilletesIda[$i] = new Billete();
+             $this->BilletesIda[$i]->reserva = "REV-" . substr($this->salidaIda,0,4) . "." . $this->idReserva;
+             $this->BilletesIda[$i]->fecha = substr($this->salidaIda,5,2) . "/" . substr($this->salidaIda,8,2) . "/" .  substr($this->salidaIda,0,4);
+             $this->BilletesIda[$i]->tren = "ave".$this->idTrenIda;
+             $this->BilletesIda[$i]->identificador = "TKT-".$codigoCiudadOrigen."-".$codigoCiudadDestino."-".$this->trayectoIda.".".$this->idReserva.".".$i;
+             $this->BilletesIda[$i]->estacion_origen = $nombreCiudadOrigen."-".$nombreEstacionOrigen;
+             $this->BilletesIda[$i]->Hida = $this->salidaIda;
+             $this->BilletesIda[$i]->estacion_destino = $nombreCiudadDestino."-".$nombreEstacionDestino;
+             $this->BilletesIda[$i]->Hllegada = $this->llegadaIda;
+             $this->BilletesIda[$i]->clase = $this->claseIda;
+             $this->BilletesIda[$i]->tarjeta = $this->tarjetaToString($this->tarjetaIda);         
+             $this->BilletesIda[$i]->precio = $this->precioIda;      
+                          
+             $sqltmp = "SELECT id FROM gi_ave.Tramo" .
+               " where Trayecto_id =" . $this->trayectoIda . " and " .
+                "salida>='" . $this->salidaIda . "' and llegada<='" .
+                $this->llegadaIda . "'";
+             
+              $result = mysqli_query($connection, $sqltmp) or die("Query fail: " . mysqli_error());
+               while ($row = mysqli_fetch_array($result)) {  
+                  
+                    $idTrayecto = $row[0];
+                    $sql .= "INSERT INTO `gi_ave`.`Billete_has_Tramo` " . 
+                    "(`Billete_id`,`Tramo_id`) VALUES (LAST_INSERT_ID()," . $idTrayecto . ")" . $separador;
+                     if($this->claseIda == "Turista")
+                     {
+                     $sql .= "UPDATE `gi_ave`.`Tramo` SET `disponibilidad_turista` = `disponibilidad_turista` - 1 " .
+                            "WHERE `id` = " . $idTrayecto . $separador;
+                     $sql .= "call gi_ave.Check_Disponibilidad(" . $idTrayecto . ",'Turista')" . $separador;
+                     }
+                    else 
+                    {
+                        $sql .= "UPDATE `gi_ave`.`Tramo` SET `disponibilidad_bussines` = `disponibilidad_bussines` - 1 " .
+                            "WHERE `id` = " . $idTrayecto. $separador;
+                         $sql .= "call gi_ave.Check_Disponibilidad(" . $idTrayecto . ",'Preferente')" . $separador;
+                    }
+               }
+             
+        }
+        if($this->vuelta)
+        {
+            for($i = 1;$i<=$this->Viajeros;$i++)
+            {
+                $sql .= "INSERT INTO `gi_ave`.`Billete` " . 
+                "(`descuento`,`Tipo`,`precio_base`,`porcentaje_impuesto`,`PVP`," .
+                        "`coche`,`plaza`,`Tarjeta_de_Descuento_id`,`Reserva_id`,`Clase`,`Viajero`) ".
+                "VALUES(" . $this->descuentoVuelta . ",2,0,0.21," . $this->precioIda .
+                ",1,2," .$this->tarjetaVuelta . ",@reserva,'" . $this->claseVuelta . 
+                "',". $i . ")" . $separador;
+                mysql_query($sql); 
+                $this->idBilletesVuelta[$i] = mysql_insert_id();                  
+
+                $this->BilletesVuelta[$i] = new Billete();
+                $this->BilletesVuelta[$i]->reserva = "REV-" . substr($this->salidaVuelta,0,4) . "." . $this->idReserva;
+                $this->BilletesVuelta[$i]->fecha = substr($this->salidaVuelta,5,2) . "/" . substr($this->salidaVuelta,8,2) . "/" .  substr($this->salidaIda,0,4);
+                $this->BilletesVuelta[$i]->tren = "ave".$this->idTrenVuelta;
+                $this->BilletesVuelta[$i]->identificador = "TKT-".$codigoCiudadDestino."-".$codigoCiudadOrigen.".".$this->trayectoVuelta.".".$this->idReserva.".".$i;
+                $this->BilletesVuelta[$i]->estacion_origen = $nombreCiudadDestino."-".$nombreEstacionDestino;
+                $this->BilletesVuelta[$i]->Hida = $this->salidaVuelta;
+                $this->BilletesVuelta[$i]->estacion_destino = $nombreCiudadOrigen."-".$nombreEstacionOrigen;
+                $this->BilletesVuelta[$i]->Hllegada = $this->llegadaVuelta;
+                $this->BilletesVuelta[$i]->clase = $this->claseVuelta;
+                $this->BilletesVuelta[$i]->tarjeta = $this->tarjetaToString($this->tarjetaVuelta);         
+                $this->BilletesVuelta[$i]->precio = $this->precioVuelta;  
+                 
+                $sqltmp = "SELECT id FROM gi_ave.Tramo" .
+               " where Trayecto_id =" . $this->trayectoVuelta . " and " .
+                "salida>='" . $this->salidaVuelta . "' and llegada<='" .
+                $this->llegadaVuelta . "'";
+             
+              $result = mysqli_query($connection, $sqltmp) or die("Query fail: " . mysqli_error());
+               while ($row = mysqli_fetch_array($result)) {  
+                  
+                   $idTrayecto = $row[0];
+                   $sql .= "INSERT INTO `gi_ave`.`Billete_has_Tramo` " . 
+                    "(`Billete_id`,`Tramo_id`) VALUES (LAST_INSERT_ID()," . $idTrayecto . ")" . $separador;
+                     if($this->claseVuelta == "Turista")
+                     {
+                     $sql .= "UPDATE `gi_ave`.`Tramo` SET `disponibilidad_turista` = `disponibilidad_turista` - 1 " .
+                            "WHERE `id` = " . $idTrayecto . $separador;
+                     $sql .= "call gi_ave.Check_Disponibilidad(" . $idTrayecto . ",'Turista')" . $separador;
+                     }
+                    else 
+                    {
+                        $sql .= "UPDATE `gi_ave`.`Tramo` SET `disponibilidad_bussines` = `disponibilidad_bussines` - 1 " .
+                            "WHERE `id` = " . $idTrayecto. $separador;
+                        $sql .= "call gi_ave.Check_Disponibilidad(" . $idTrayecto . ",'Preferente')" . $separador;
+ 
+                    }
+               }
+                        
+             }
+        } 
+        $sql .= "COMMIT" . $separador;
+        echo $sql;
+             
+    } 
+    
+    
     private function cortarCadena()
     {
         $pos = strpos($this->tmpStr,";");
@@ -294,7 +434,7 @@ class BDConfirmar {
         else
             $this->codPromocional = 0;
         $this->Viajeros = $viajeros;
-        $this->registrarReserva();
+        $this->registrarReservaConcurrente();
     }
     
     public function getBilletesIda()

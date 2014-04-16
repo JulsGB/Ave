@@ -1,12 +1,12 @@
 <?php
-    header("Content-type: text/xml");
+  /*  header("Content-type: text/xml");
     echo '<?xml version="1.0" encoding="ISO-8859-1"?>';
     echo '<?xml-stylesheet type="text/xsl" href="billete.xsl"?>';
-    echo '<!DOCTYPE reserva SYSTEM "./billetedtd.dtd">';
+    echo '<!DOCTYPE reserva SYSTEM "./billetedtd.dtd">';*/
     
     require_once ("./BDConfirmar.php");
 
-    $numTickets = $confirmacion->getViajeros();
+  /*  $numTickets = $confirmacion->getViajeros();
     $infoIda = $confirmacion->getBilletesIda();
     $infoVuelta = $confirmacion->getBilletesVuelta();        
 
@@ -51,5 +51,5 @@
             echo '</billete>';
         }
     }
-    echo '</reserva>';
+    echo '</reserva>';*/
 ?>
