@@ -551,7 +551,7 @@ class BDConfirmar {
     public function registrarReservaConcurrenteProcedure($Ida,$Vuelta,$ip,$codPromocional,$Viajeros)
     {
         $registro = false;
-        $i = 0;
+        $i = 1;
         $connection = mysqli_connect("bbdd.dlsi.ua.es", "gi_ave", ".gi_ave.", "gi_ave", "3306");               
         $this->idBilletesIda = array($this->Viajeros);
         $this->idBilletesVuelta = array($this->Viajeros);
@@ -574,7 +574,8 @@ class BDConfirmar {
              $nombreEstacionDestino = $BDEstacion->DameNombrePorID($this->edesIda);
                          
              $this->BilletesIda[$i] = new Billete();
-             $this->BilletesIda[$i]->reserva = "REV-" . substr($this->salidaIda,0,4) . "." . $row[0];
+             $this->idReserva = $row[0];
+             $this->BilletesIda[$i]->reserva = "REV-" . substr($this->salidaIda,0,4) . "." . $this->idReserva;
              $this->BilletesIda[$i]->fecha = substr($this->salidaIda,5,2) . "/" . substr($this->salidaIda,8,2) . "/" .  substr($this->salidaIda,0,4);
              $this->BilletesIda[$i]->tren = "ave".$row[1];
              $this->idBilletesVuelta[$i] = $row[2];
