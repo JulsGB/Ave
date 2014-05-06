@@ -552,13 +552,14 @@ class BDConfirmar {
     {
         $registro = false;
         $i = 1;
+        $ida = true;
         $connection = mysqli_connect("bbdd.dlsi.ua.es", "gi_ave", ".gi_ave.", "gi_ave", "3306");               
         $this->idBilletesIda = array($this->Viajeros);
         $this->idBilletesVuelta = array($this->Viajeros);
         $this->BilletesIda = array($this->Viajeros);
         $this->BilletesVuelta = array($this->Viajeros);
 
-        $sql = "CALL `gi_ave`.`insertar_reserva	`(\"". $Ida . "\",\"" . $Vuelta . "\",\"" . $ip  . "\"," .  $codPromocional . "," . $Viajeros . ");"; 
+        $sql = "CALL gi_ave.insertar_reserva(\"". $Ida . "\",\"" . $Vuelta . "\",\"" . $ip  . "\"," .  $codPromocional . "," . $Viajeros . ");"; 
              
        // echo $sql;
         $result = mysqli_query($connection, $sql) or die("Query fail: " . mysqli_error());
@@ -572,13 +573,16 @@ class BDConfirmar {
              $nombreCiudadDestino = $BDCiudad->DameNombrePorID($this->cdesIda);
              $nombreEstacionOrigen = $BDEstacion->DameNombrePorID($this->eorgIda);
              $nombreEstacionDestino = $BDEstacion->DameNombrePorID($this->edesIda);
-                         
+             
+             if($row[0] == 0)
+             {                   
+                 
              $this->BilletesIda[$i] = new Billete();
-             $this->idReserva = $row[0];
+             $this->idReserva = $row[1];
              $this->BilletesIda[$i]->reserva = "REV-" . substr($this->salidaIda,0,4) . "." . $this->idReserva;
              $this->BilletesIda[$i]->fecha = substr($this->salidaIda,5,2) . "/" . substr($this->salidaIda,8,2) . "/" .  substr($this->salidaIda,0,4);
-             $this->BilletesIda[$i]->tren = "ave".$row[1];
-             $this->idBilletesVuelta[$i] = $row[2];
+             $this->BilletesIda[$i]->tren = "ave".$row[2];
+             $this->idBilleteslda[$i] = $row[3];
              $this->BilletesIda[$i]->identificador = "TKT-".$codigoCiudadOrigen."-".$codigoCiudadDestino."-".$this->trayectoIda.".".$this->idReserva.".".$i;
              $this->BilletesIda[$i]->estacion_origen = $nombreCiudadOrigen."-".$nombreEstacionOrigen;
              $this->BilletesIda[$i]->Hida = $this->salidaIda;
@@ -588,6 +592,31 @@ class BDConfirmar {
              $this->BilletesIda[$i]->tarjeta = $this->tarjetaToString($this->tarjetaIda);         
              $this->BilletesIda[$i]->precio = $this->precioIda;      
              $i++;
+             }
+             else
+             {
+                if($ida)
+                 {
+                     $i = 1;
+                     $ida = false;
+                 }
+                $this->BilletesVuelta[$i] = new Billete();               
+                $this->BilletesVuelta[$i]->reserva = "REV-" . substr($this->salidaVuelta,0,4) . "." . $this->idReserva;
+                $this->BilletesVuelta[$i]->fecha = substr($this->salidaVuelta,5,2) . "/" . substr($this->salidaVuelta,8,2) . "/" .  substr($this->salidaVuelta,0,4);
+                $this->BilletesVuelta[$i]->tren = "ave".$row[2];
+                $this->idBilletesVuelta[$i] = $row[3];
+                $this->BilletesVuelta[$i]->identificador = "TKT-".$codigoCiudadDestino."-".$codigoCiudadOrigen."-".$this->trayectoVuelta.".".$this->idReserva.".".$i;
+                $this->BilletesVuelta[$i]->estacion_origen = $nombreCiudadDestino."-".$nombreEstacionDestino;
+                $this->BilletesVuelta[$i]->Hida = $this->salidaVuelta;
+                $this->BilletesVuelta[$i]->estacion_destino = $nombreCiudadOrigen."-".$nombreEstacionOrigen;
+                $this->BilletesVuelta[$i]->Hllegada = $this->llegadaVuelta;
+                $this->BilletesVuelta[$i]->clase = $this->claseVuelta;
+                $this->BilletesVuelta[$i]->tarjeta = $this->tarjetaToString($this->tarjetaVuelta);         
+                $this->BilletesVuelta[$i]->precio = $this->precioVuelta;      
+                $i++;
+             }    
+             
+             
         }              
              
     } 
