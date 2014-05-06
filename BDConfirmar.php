@@ -560,7 +560,7 @@ class BDConfirmar {
 
         $sql = "CALL `gi_ave`.`insertar_reserva	`(\"". $Ida . "\",\"" . $Vuelta . "\",\"" . $ip  . "\"," .  $codPromocional . "," . $Viajeros . ");"; 
              
-        echo $sql;
+       // echo $sql;
         $result = mysqli_query($connection, $sql) or die("Query fail: " . mysqli_error());
         $BDCiudad = new BDCiudad();
         $BDEstacion = new BDEstacion();

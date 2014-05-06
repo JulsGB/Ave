@@ -26,7 +26,7 @@ class BDEstacion {
         $datos = $this->BD->Query($sql);
                 
         //creamos un nuevo usuario y le insertamos los valores de la BD 
-
+echo "DSFSD"; 
         while (!$datos->EOF) {
             if (md5((string) $datos->fields["id"]) == $id) {
               
