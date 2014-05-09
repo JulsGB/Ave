@@ -3,10 +3,10 @@ require_once('./Trayecto.php');
 
 $tipoBD = "mysql";
 $hostBD = "bbdd.dlsi.ua.es:3306";
-$userBD = "gi_ave";
-$passBD = ".gi_ave.";
+$userBD = "gi_ave_operario";
+$passBD = "ave_operario";
 $schemeBD = "gi_ave";
-$connection = mysqli_connect("bbdd.dlsi.ua.es", "gi_ave", ".gi_ave.", "gi_ave", "3306");
+$connection = mysqli_connect("bbdd.dlsi.ua.es", "gi_ave_operario", "ave_operario", "gi_ave", "3306");
 
 
 if ($_FILES["imagen"]["tmp_name"]!="") {
